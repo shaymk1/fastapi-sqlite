@@ -2,7 +2,7 @@
 from fastapi import FastAPI, Response, status, HTTPException
 from . import models
 from .database import engine, SessionLocal
-from .routers import product_api, seller_api
+from .routers import product_api, seller_api, login_api
 
 # from . import schemas
 # from fastapi.params import Depends
@@ -31,6 +31,7 @@ app = FastAPI(
 
 app.include_router(product_api.router)
 app.include_router(seller_api.router)
+app.include_router(login_api.router)
 
 models.Base.metadata.create_all(engine)
 

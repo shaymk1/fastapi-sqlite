@@ -3,7 +3,9 @@
 from fastapi import FastAPI, APIRouter, Response, status, HTTPException
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
-from .. import models,schemas
+
+from product.routers.login_api import get_current_user
+from .. import models, schemas
 from product.database import engine, SessionLocal
 from typing import List
 from passlib.context import CryptContext
@@ -11,7 +13,7 @@ from passlib.context import CryptContext
 
 router = APIRouter(
     tags=['products'],
-    prefix = "/product" #to help you with the route
+    prefix="/product"  # to help you with the route
 )
 
 
@@ -24,9 +26,9 @@ def get_db():
         db.close()
 
 
-@router.get('/' )
+@router.get('/')
 # because we want to have access to all our data on db
-def get_products(db: Session = Depends(get_db)):
+def get_products(db: Session = Depends(get_db), current_user: schemas.Seller = Depends(get_current_user)):
     products = db.query(models.Product).all()
     return products
 
